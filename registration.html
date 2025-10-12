@@ -59,20 +59,16 @@
       font-weight: 600; cursor: pointer; transition: transform 0.2s, box-shadow 0.2s; margin-top: 20px;
     }
     .submit-btn:hover { transform: translateY(-2px); box-shadow: 0 10px 25px rgba(26, 95, 58, 0.4); }
+    .instructions-btn {
+      display: block; background: linear-gradient(135deg, #1a5f3a 0%, #0d3d24 100%);
+      color: white; padding: 12px 24px; border-radius: 8px; text-decoration: none;
+      font-weight: 600; transition: all 0.3s; text-align: center; margin-top: 20px;
+    }
+    .instructions-btn:hover { transform: translateY(-2px); box-shadow: 0 10px 25px rgba(26, 95, 58, 0.4); }
     #success {
       display: none; margin-top: 20px; padding: 25px;
       background: linear-gradient(135deg, #e8f5e9 0%, #c8e6c9 100%);
       border: 2px solid #1a5f3a; border-radius: 10px; text-align: center;
-    }
-    .instructions-notice {
-      background: linear-gradient(135deg, #fff8e1 0%, #ffecb3 100%);
-      border: 2px solid #f9a825; border-radius: 12px; padding: 25px;
-      margin-bottom: 30px; display: flex; align-items: flex-start; gap: 20px;
-    }
-    .instructions-btn {
-      display: inline-block; background: linear-gradient(135deg, #1a5f3a 0%, #0d3d24 100%);
-      color: white; padding: 12px 24px; border-radius: 8px; text-decoration: none;
-      font-weight: 600; transition: all 0.3s;
     }
     @media (max-width: 768px) {
       .form-row { grid-template-columns: 1fr; }
@@ -107,17 +103,6 @@
     </div>
 
     <div class="form-content">
-      <div class="instructions-notice">
-        <div class="notice-content">
-          <h3 data-en="Before You Begin" data-sw="Kabla ya Kuanza"></h3>
-          <p data-en="Please read the joining instructions carefully before filling out this form."
-             data-sw="Tafadhali soma maelekezo ya kujiunga kwa makini kabla ya kujaza fomu hii."></p>
-          <a href="joining-instructions.pdf" target="_blank" class="instructions-btn"
-             data-en="📄 View Joining Instructions (PDF)"
-             data-sw="📄 Tazama Maelekezo ya Kujiunga (PDF)"></a>
-        </div>
-      </div>
-
       <form id="admissionForm">
         <div class="section-title">
           <span>👤</span>
@@ -214,6 +199,10 @@
         </div>
 
         <button type="submit" class="submit-btn" data-en="Submit Application" data-sw="Tuma Maombi"></button>
+
+        <a href="joining-instructions.pdf" target="_blank" class="instructions-btn"
+           data-en="📄 View Joining Instructions (PDF)"
+           data-sw="📄 Tazama Maelekezo ya Kujiunga (PDF)"></a>
       </form>
 
       <div id="success">
