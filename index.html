@@ -1,0 +1,353 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Mkuzo Islamic Secondary School</title>
+  <link rel="icon" type="image/png" href="images/logo.jpg">
+
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(135deg, #e8f5e9 0%, #c8e6c9 100%);
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 20px;
+    }
+
+    .container {
+      background: white;
+      border-radius: 20px;
+      box-shadow: 0 20px 60px rgba(27, 94, 32, 0.2);
+      max-width: 1200px;
+      width: 100%;
+      overflow: hidden;
+      border: 3px solid #1b5e20;
+    }
+
+    /* Header */
+    .school-header {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-wrap: wrap;
+      padding: 25px 20px;
+      background: linear-gradient(135deg, #ffffff 0%, #f1f8f4 100%);
+      border-bottom: 5px solid #1b5e20;
+      position: relative;
+    }
+
+    .school-header::after {
+      content: '';
+      position: absolute;
+      bottom: -5px;
+      left: 0;
+      right: 0;
+      height: 3px;
+      background: linear-gradient(90deg, #2e7d32, #43a047, #66bb6a, #43a047, #2e7d32);
+    }
+
+    .school-header .logo-section img {
+      height: 90px;
+      margin-right: 25px;
+      filter: drop-shadow(0 4px 8px rgba(27, 94, 32, 0.2));
+    }
+
+    .school-header .text-section {
+      text-align: center;
+    }
+
+    .school-header h2 {
+      font-size: 1.1rem;
+      color: #2e7d32;
+      letter-spacing: 2px;
+      margin-bottom: 8px;
+      font-weight: 700;
+      text-transform: uppercase;
+    }
+
+    .school-header h1 {
+      font-size: 1.8rem;
+      color: #1b5e20;
+      font-weight: 900;
+      margin-bottom: 10px;
+      text-shadow: 1px 1px 2px rgba(27, 94, 32, 0.1);
+    }
+
+    .school-header p {
+      font-size: 0.95rem;
+      color: #2e7d32;
+      line-height: 1.6;
+    }
+
+    .school-header a {
+      color: #1b5e20;
+      text-decoration: none;
+      font-weight: 600;
+    }
+
+    .school-header a:hover {
+      text-decoration: underline;
+      color: #2e7d32;
+    }
+
+    /* Language switcher */
+    .lang-switch {
+      position: absolute;
+      top: 15px;
+      right: 20px;
+      background: #1b5e20;
+      color: white;
+      border: none;
+      padding: 8px 14px;
+      border-radius: 20px;
+      cursor: pointer;
+      font-weight: 600;
+      transition: background 0.3s;
+    }
+
+    .lang-switch:hover {
+      background: #43a047;
+    }
+
+    @media (max-width: 768px) {
+      .school-header {
+        flex-direction: column;
+        text-align: center;
+      }
+      .school-header .logo-section img {
+        margin-bottom: 15px;
+        margin-right: 0;
+        height: 75px;
+      }
+      .school-header h1 {
+        font-size: 1.5rem;
+      }
+      .lang-switch {
+        top: 10px;
+        right: 10px;
+        padding: 6px 12px;
+      }
+    }
+
+    /* Content */
+    .content {
+      padding: 50px 40px;
+      background: linear-gradient(to bottom, #ffffff 0%, #f9fdf9 100%);
+    }
+
+    .welcome-text {
+      text-align: center;
+      margin-bottom: 50px;
+    }
+
+    .welcome-text h2 {
+      color: #1b5e20;
+      font-size: 2.2em;
+      margin-bottom: 20px;
+      font-weight: 800;
+      position: relative;
+      display: inline-block;
+    }
+
+    .welcome-text h2::after {
+      content: '';
+      position: absolute;
+      bottom: -10px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 80px;
+      height: 4px;
+      background: linear-gradient(90deg, #2e7d32, #43a047, #66bb6a);
+      border-radius: 2px;
+    }
+
+    .welcome-text p {
+      color: #2e7d32;
+      font-size: 1.15em;
+      line-height: 1.8;
+      max-width: 800px;
+      margin: 20px auto 0;
+      font-weight: 500;
+    }
+
+    .button-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 30px;
+      margin-top: 50px;
+    }
+
+    .nav-button {
+      background: linear-gradient(135deg, #1b5e20 0%, #2e7d32 50%, #43a047 100%);
+      color: white;
+      padding: 35px 25px;
+      text-align: center;
+      border-radius: 18px;
+      text-decoration: none;
+      transition: all 0.4s ease;
+      box-shadow: 0 8px 20px rgba(27, 94, 32, 0.3);
+      position: relative;
+      overflow: hidden;
+      border: 2px solid rgba(255, 255, 255, 0.2);
+    }
+
+    .nav-button:hover {
+      transform: translateY(-8px) scale(1.02);
+      box-shadow: 0 15px 35px rgba(27, 94, 32, 0.4);
+      background: linear-gradient(135deg, #2e7d32 0%, #43a047 50%, #66bb6a 100%);
+    }
+
+    .nav-button-icon {
+      font-size: 3em;
+      margin-bottom: 18px;
+      display: block;
+      filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.2));
+    }
+
+    .nav-button-title {
+      font-size: 1.4em;
+      font-weight: bold;
+      margin-bottom: 10px;
+      letter-spacing: 0.5px;
+    }
+
+    .nav-button-desc {
+      font-size: 0.95em;
+      opacity: 0.95;
+      font-weight: 500;
+    }
+
+    .footer {
+      background: linear-gradient(135deg, #1b5e20 0%, #2e7d32 100%);
+      padding: 25px 20px;
+      text-align: center;
+      color: #ffffff;
+      font-size: 0.95em;
+      border-top: 3px solid #43a047;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <!-- Header -->
+    <header class="school-header">
+      <button class="lang-switch" id="langSwitch">Swahili</button>
+      <div class="logo-section">
+        <img src="images/logo.png" alt="Mkuzo Islamic Secondary School Logo">
+      </div>
+      <div class="text-section">
+        <h2 data-en="Islamic Propagation Centre" data-sw="Kituo cha Uenezaji wa Uislamu">Islamic Propagation Centre</h2>
+        <h1 data-en="MKUZO ISLAMIC SECONDARY SCHOOL" data-sw="SHULE YA SEKONDARI YA UISLAMU MKUZO">MKUZO ISLAMIC SECONDARY SCHOOL</h1>
+        <p>
+          <span data-en="P.O. Box 346 Songea - Ruvuma | Mob: 0654 878317, 0621 615646 | Email:" 
+                data-sw="S.L.P. 346 Songea - Ruvuma | Simu: 0654 878317, 0621 615646 | Barua pepe:">P.O. Box 346 Songea - Ruvuma | Mob: 0654 878317, 0621 615646 | Email:</span>
+          <a href="mailto:mkuzo.islamic@yahoo.com">mkuzo.islamic@yahoo.com</a>
+        </p>
+      </div>
+    </header>
+
+    <!-- Main Content -->
+    <div class="content">
+      <div class="welcome-text">
+        <h2 data-en="Welcome to Our School Portal" data-sw="Karibu kwenye Tovuti ya Shule Yetu">Welcome to Our School Portal</h2>
+        <p data-en="Excellence in Islamic Education and Academic Achievement. Empowering students with knowledge, faith, and character for a brighter future."
+           data-sw="Ubora katika Elimu ya Kiislamu na Mafanikio ya Kitaaluma. Kuwawezesha wanafunzi kwa maarifa, imani, na tabia njema kwa maisha bora ya baadaye.">
+           Excellence in Islamic Education and Academic Achievement. Empowering students with knowledge, faith, and character for a brighter future.
+        </p>
+      </div>
+
+      <div class="button-grid">
+        <a href="school_join_instraction.html" class="nav-button">
+          <span class="nav-button-icon">📋</span>
+          <div class="nav-button-title" data-en="Join Instructions" data-sw="Maelekezo ya Kujiunga">Join Instructions</div>
+          <div class="nav-button-desc" data-en="Learn how to join our school" data-sw="Jifunze jinsi ya kujiunga na shule yetu">Learn how to join our school</div>
+        </a>
+
+        <a href="registration.html" class="nav-button">
+          <span class="nav-button-icon">✍️</span>
+          <div class="nav-button-title" data-en="Registration" data-sw="Usajili">Registration</div>
+          <div class="nav-button-desc" data-en="Register new students" data-sw="Sajili wanafunzi wapya">Register new students</div>
+        </a>
+
+        <a href="student_profile.html" class="nav-button">
+          <span class="nav-button-icon">👤</span>
+          <div class="nav-button-title" data-en="Student Profile" data-sw="Wasifu wa Mwanafunzi">Student Profile</div>
+          <div class="nav-button-desc" data-en="View student information & records" data-sw="Angalia taarifa na rekodi za wanafunzi">View student information & records</div>
+        </a>
+
+        <a href="timetable.html" class="nav-button">
+          <span class="nav-button-icon">📅</span>
+          <div class="nav-button-title" data-en="School Timetable" data-sw="Ratiba ya Shule">School Timetable</div>
+          <div class="nav-button-desc" data-en="View class schedules & periods" data-sw="Angalia ratiba za masomo na vipindi">View class schedules & periods</div>
+        </a>
+
+        <a href="admin.html" class="nav-button">
+          <span class="nav-button-icon">⚙️</span>
+          <div class="nav-button-title" data-en="Admin Portal" data-sw="Tovuti ya Utawala">Admin Portal</div>
+          <div class="nav-button-desc" data-en="Administrative access" data-sw="Ufikiaji wa kiutawala">Administrative access</div>
+        </a>
+
+        <a href="academic.html" class="nav-button">
+          <span class="nav-button-icon">📚</span>
+          <div class="nav-button-title" data-en="Academics" data-sw="Masomo">Academics</div>
+          <div class="nav-button-desc" data-en="Academic resources & results" data-sw="Rasilimali za masomo na matokeo">Academic resources & results</div>
+        </a>
+
+        
+      </div>
+    </div>
+
+    <!-- Footer -->
+    <div class="footer">
+      <p data-en="© 2025 Mkuzo Islamic Secondary School. All rights reserved." data-sw="© 2025 Shule ya Sekondari ya Uislamu Mkuzo. Haki zote zimehifadhiwa.">
+        © 2025 Mkuzo Islamic Secondary School. All rights reserved.
+      </p>
+    </div>
+  </div>
+
+  <script>
+    const switchBtn = document.getElementById('langSwitch');
+    let currentLang = 'en';
+
+    // Check if we can use localStorage safely
+    try {
+      const savedLang = localStorage.getItem('lang');
+      if (savedLang) currentLang = savedLang;
+    } catch (e) {
+      // If localStorage isn't available, just use default
+      console.log('localStorage not available, using default language');
+    }
+
+    function setLanguage(lang) {
+      document.querySelectorAll('[data-en]').forEach(el => {
+        el.innerHTML = el.getAttribute(`data-${lang}`);
+      });
+      
+      // Try to save to localStorage if available
+      try {
+        localStorage.setItem('lang', lang);
+      } catch (e) {
+        // Silently fail if localStorage isn't available
+      }
+      
+      switchBtn.textContent = lang === 'en' ? 'Swahili' : 'English';
+      currentLang = lang;
+    }
+
+    switchBtn.addEventListener('click', () => {
+      setLanguage(currentLang === 'en' ? 'sw' : 'en');
+    });
+
+    setLanguage(currentLang);
+  </script>
+</body>
+</html>

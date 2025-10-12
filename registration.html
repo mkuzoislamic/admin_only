@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Mkuzo Islamic High School - Online Admission</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(135deg, #1a5f3a 0%, #0d3d24 100%);
+      min-height: 100vh; padding: 20px;
+    }
+    .container {
+      max-width: 900px; margin: 0 auto; background: white;
+      border-radius: 20px; box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+      overflow: hidden;
+    }
+    .school-header {
+      display: flex; align-items: center; justify-content: space-between;
+      flex-wrap: wrap; padding: 15px 20px; background: #ffffff;
+      border-bottom: 4px solid #1a5f3a;
+    }
+    .logo-section img { height: 70px; }
+    .text-section { text-align: center; flex: 1; }
+    .text-section h2 { font-size: 1rem; color: #333; margin-bottom: 5px; font-weight: 600; }
+    .text-section h1 { font-size: 1.6rem; color: #1a5f3a; font-weight: 800; margin-bottom: 8px; }
+    .text-section p { font-size: 0.9rem; color: #444; }
+    .lang-switcher select {
+      padding: 8px 12px; border-radius: 8px; border: 2px solid #1a5f3a;
+      font-weight: 600; color: #1a5f3a; background: white; cursor: pointer;
+    }
+    .header {
+      background: linear-gradient(135deg, #1a5f3a 0%, #0d3d24 100%);
+      color: white; padding: 40px 30px; text-align: center; position: relative;
+    }
+    .header h1 { font-size: 2em; margin-bottom: 10px; }
+    .header p { font-size: 1.1em; opacity: 0.95; }
+    .form-content { padding: 40px 30px; }
+    .section-title {
+      font-size: 1.5em; color: #1a5f3a; margin: 30px 0 20px 0;
+      padding-bottom: 10px; border-bottom: 3px solid #1a5f3a;
+      display: flex; align-items: center; gap: 10px;
+    }
+    .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 20px; }
+    .form-group.full-width { grid-column: 1 / -1; }
+    label { display: block; margin-bottom: 8px; color: #333; font-weight: 600; font-size: 0.95em; }
+    input, select, textarea {
+      width: 100%; padding: 12px 16px; border: 2px solid #e0e0e0;
+      border-radius: 8px; font-size: 1em; transition: all 0.3s; font-family: inherit;
+    }
+    input:focus, select:focus, textarea:focus {
+      outline: none; border-color: #1a5f3a; box-shadow: 0 0 0 3px rgba(26, 95, 58, 0.15);
+    }
+    textarea { resize: vertical; min-height: 100px; }
+    .submit-btn {
+      width: 100%; padding: 16px; background: linear-gradient(135deg, #1a5f3a 0%, #0d3d24 100%);
+      color: white; border: none; border-radius: 10px; font-size: 1.1em;
+      font-weight: 600; cursor: pointer; transition: transform 0.2s, box-shadow 0.2s; margin-top: 20px;
+    }
+    .submit-btn:hover { transform: translateY(-2px); box-shadow: 0 10px 25px rgba(26, 95, 58, 0.4); }
+    #success {
+      display: none; margin-top: 20px; padding: 25px;
+      background: linear-gradient(135deg, #e8f5e9 0%, #c8e6c9 100%);
+      border: 2px solid #1a5f3a; border-radius: 10px; text-align: center;
+    }
+    .instructions-notice {
+      background: linear-gradient(135deg, #fff8e1 0%, #ffecb3 100%);
+      border: 2px solid #f9a825; border-radius: 12px; padding: 25px;
+      margin-bottom: 30px; display: flex; align-items: flex-start; gap: 20px;
+    }
+    .instructions-btn {
+      display: inline-block; background: linear-gradient(135deg, #1a5f3a 0%, #0d3d24 100%);
+      color: white; padding: 12px 24px; border-radius: 8px; text-decoration: none;
+      font-weight: 600; transition: all 0.3s;
+    }
+    @media (max-width: 768px) {
+      .form-row { grid-template-columns: 1fr; }
+      .school-header { flex-direction: column; text-align: center; }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header class="school-header">
+      <div class="logo-section"><img src="logo.png" alt="Logo"></div>
+      <div class="text-section">
+        <h2 data-en="ISLAMIC PROPAGATION CENTRE" data-sw="KITUO CHA KUENEZA UISLAMU"></h2>
+        <h1 data-en="MKUZO ISLAMIC SECONDARY SCHOOL" data-sw="SHULE YA SEKONDARI YA UISLAMU MKUZO"></h1>
+        <p>
+          P.O. Box 346 Songea - Ruvuma |
+          Mob: 0654 878317, 0621 615646 |
+          Email: <a href="mailto:mkuzo.islamic@yahoo.com">mkuzo.islamic@yahoo.com</a>
+        </p>
+      </div>
+      <div class="lang-switcher">
+        <select id="languageSelect">
+          <option value="en">🇬🇧 English</option>
+          <option value="sw">🇹🇿 Kiswahili</option>
+        </select>
+      </div>
+    </header>
+
+    <div class="header">
+      <h1 data-en="☪ YOU'RE WELCOME TO OUR SCHOOL" data-sw="☪ KARIBU SHULE YETU"></h1>
+      <p data-en="Online Admission Application Form" data-sw="Fomu ya Maombi ya Kujiunga Mtandaoni"></p>
+    </div>
+
+    <div class="form-content">
+      <div class="instructions-notice">
+        <div class="notice-content">
+          <h3 data-en="Before You Begin" data-sw="Kabla ya Kuanza"></h3>
+          <p data-en="Please read the joining instructions carefully before filling out this form."
+             data-sw="Tafadhali soma maelekezo ya kujiunga kwa makini kabla ya kujaza fomu hii."></p>
+          <a href="joining-instructions.pdf" target="_blank" class="instructions-btn"
+             data-en="📄 View Joining Instructions (PDF)"
+             data-sw="📄 Tazama Maelekezo ya Kujiunga (PDF)"></a>
+        </div>
+      </div>
+
+      <form id="admissionForm">
+        <div class="section-title">
+          <span>👤</span>
+          <span data-en="Student Information" data-sw="Taarifa za Mwanafunzi"></span>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label data-en="First Name *" data-sw="Jina la Kwanza *"></label>
+            <input name="firstName" required placeholder="Enter first name" data-placeholder-sw="Ingiza jina la kwanza" />
+          </div>
+          <div class="form-group">
+            <label data-en="Middle Name *" data-sw="Jina la Kati *"></label>
+            <input name="middleName" required placeholder="Enter middle name" data-placeholder-sw="Ingiza jina la kati" />
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label data-en="Last Name *" data-sw="Jina la Mwisho *"></label>
+            <input name="lastName" required placeholder="Enter last name" data-placeholder-sw="Ingiza jina la mwisho" />
+          </div>
+          <div class="form-group">
+            <label data-en="Gender *" data-sw="Jinsia *"></label>
+            <select name="gender" required>
+              <option value="" data-en="-- Select Gender --" data-sw="-- Chagua Jinsia --"></option>
+              <option data-en="Male" data-sw="Mwanaume">Male</option>
+              <option data-en="Female" data-sw="Mwanamke">Female</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label data-en="Date of Birth *" data-sw="Tarehe ya Kuzaliwa *"></label>
+            <input type="date" name="dob" required />
+          </div>
+          <div class="form-group">
+            <label data-en="Student Address *" data-sw="Anwani ya Mwanafunzi *"></label>
+            <input name="studentAddress" required placeholder="Enter address" data-placeholder-sw="Ingiza anwani" />
+          </div>
+        </div>
+
+        <div class="section-title"><span>👨‍👩‍👧</span>
+          <span data-en="Parent / Guardian Information" data-sw="Taarifa za Mzazi / Mlezi"></span>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label data-en="Parent/Guardian Name *" data-sw="Jina la Mzazi/Mlezi *"></label>
+            <input name="parentName" required placeholder="Enter full name" data-placeholder-sw="Ingiza jina kamili" />
+          </div>
+          <div class="form-group">
+            <label data-en="Parent Phone Number *" data-sw="Namba ya Simu ya Mzazi *"></label>
+            <input name="parentPhone" pattern="0[0-9]{9}" required placeholder="e.g., 0712345678" data-placeholder-sw="mfano, 0712345678" />
+          </div>
+        </div>
+
+        <div class="form-group full-width">
+          <label data-en="Parent Address *" data-sw="Anwani ya Mzazi *"></label>
+          <input name="parentAddress" required placeholder="Enter parent/guardian address" data-placeholder-sw="Ingiza anwani ya mzazi/mlezi" />
+        </div>
+
+        <div class="section-title"><span>📚</span>
+          <span data-en="Academic Information" data-sw="Taarifa za Kielimu"></span>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label data-en="Classroom/Form *" data-sw="Darasa/Form *"></label>
+            <select name="classroom" required>
+              <option value="">-- Select Form --</option>
+              <option>Pre Form 1</option><option>Form 1</option><option>Form 2</option><option>Form 3</option>
+              <option>Form 4</option><option>Pre Form 5</option><option>Form 5</option><option>Form 6</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label data-en="Academic Year *" data-sw="Mwaka wa Masomo *"></label>
+            <select name="academicYear" required>
+              <option value="">-- Select Year --</option>
+              <option>2025/2026</option><option>2026/2027</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="form-group full-width">
+          <label data-en="Previous School" data-sw="Shule ya Awali"></label>
+          <input name="previousSchool" placeholder="Enter previous school name (optional)" data-placeholder-sw="Ingiza jina la shule ya awali (hiari)" />
+        </div>
+
+        <div class="form-group full-width">
+          <label data-en="Additional Notes" data-sw="Maelezo ya Ziada"></label>
+          <textarea name="notes" placeholder="Any additional information you'd like to share..." data-placeholder-sw="Maelezo yoyote ya ziada unayotaka kushiriki..."></textarea>
+        </div>
+
+        <button type="submit" class="submit-btn" data-en="Submit Application" data-sw="Tuma Maombi"></button>
+      </form>
+
+      <div id="success">
+        <h3 data-en="✓ Application Submitted Successfully!" data-sw="✓ Maombi Yamewasilishwa kwa Mafanikio!"></h3>
+        <p data-en="Your reference number is:" data-sw="Namba yako ya kumbukumbu ni:"></p>
+        <span id="ref"></span>
+        <p style="margin-top: 15px;" data-en="Please keep this reference number for future correspondence."
+           data-sw="Tafadhali hifadhi namba hii ya kumbukumbu kwa mawasiliano yajayo."></p>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // Google Sheets endpoint
+    window.SHEETS_ENDPOINT_URL = 'https://script.google.com/macros/s/AKfycbxM7YT-wvmPsjCTrsodNwpfDEW0oYJq_PmxqOjNYA3Opkg6F2NaYF8iuekpF4UtnzKwqQ/exec';
+
+    const form = document.getElementById('admissionForm');
+    const successDiv = document.getElementById('success');
+    const refSpan = document.getElementById('ref');
+    const langSelect = document.getElementById('languageSelect');
+
+    // --- LANGUAGE SWITCHING LOGIC ---
+    function switchLanguage(lang) {
+      document.querySelectorAll('[data-en]').forEach(el => {
+        el.textContent = el.dataset[lang];
+      });
+      document.querySelectorAll('[placeholder]').forEach(el => {
+        if (el.dataset[`placeholder-${lang}`]) {
+          el.placeholder = el.dataset[`placeholder-${lang}`];
+        }
+      });
+      document.querySelectorAll('option').forEach(opt => {
+        if (opt.dataset[lang]) opt.textContent = opt.dataset[lang];
+      });
+    }
+
+    langSelect.addEventListener('change', e => {
+      switchLanguage(e.target.value);
+    });
+
+    // Default language = English
+    switchLanguage('en');
+
+    // --- FORM SUBMIT ---
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const formData = new FormData(form);
+      const data = Object.fromEntries(formData.entries());
+      const submitBtn = form.querySelector('.submit-btn');
+      submitBtn.textContent = (langSelect.value === 'sw') ? 'Inatuma...' : 'Submitting...';
+      submitBtn.disabled = true;
+      try {
+        const response = await fetch(window.SHEETS_ENDPOINT_URL, {
+          method: 'POST',
+          body: JSON.stringify(data)
+        });
+        const result = await response.json();
+        if (result.status === 'success') {
+          refSpan.textContent = result.reference;
+          form.style.display = 'none';
+          successDiv.style.display = 'block';
+        } else alert('Error: ' + (result.message || 'Submission failed'));
+      } catch (err) {
+        alert((langSelect.value === 'sw') ? 'Hitilafu katika kutuma fomu.' : 'Error submitting form.');
+        console.error(err);
+      } finally {
+        submitBtn.textContent = (langSelect.value === 'sw') ? 'Tuma Maombi' : 'Submit Application';
+        submitBtn.disabled = false;
+      }
+    });
+  </script>
+</body>
+</html>

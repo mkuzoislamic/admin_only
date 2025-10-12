@@ -1,0 +1,670 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bulk SMS & WhatsApp - Mkuzo Islamic Secondary School</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #0d4027 0%, #1a6b3f 50%, #0d4027 100%);
+            min-height: 100vh;
+            padding: 0;
+        }
+
+        /* Professional School Header */
+        .school-header {
+            background: linear-gradient(to bottom, #ffffff 0%, #f8f9fa 100%);
+            padding: 25px 30px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15);
+            border-bottom: 5px solid #1a6b3f;
+            position: relative;
+        }
+
+        .school-header::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, #0d4027, #1a6b3f, #2e8b57, #1a6b3f, #0d4027);
+        }
+
+        .header-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            gap: 30px;
+        }
+
+        .logo-container {
+            flex-shrink: 0;
+        }
+
+        .school-logo-img {
+            width: 100px;
+            height: 100px;
+            object-fit: contain;
+            filter: drop-shadow(0 4px 8px rgba(13, 64, 39, 0.2));
+        }
+
+        .header-text {
+            flex: 1;
+            text-align: center;
+            
+        }
+
+        .header-text h2 {
+            font-size: 0.95rem;
+            color: #1a6b3f;
+            letter-spacing: 2px;
+            margin-bottom: 5px;
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+
+        .header-text h1 {
+            font-size: 2rem;
+            color: #0d4027;
+            font-weight: 900;
+            margin-bottom: 8px;
+            text-shadow: 1px 1px 2px rgba(13, 64, 39, 0.1);
+        }
+
+        .header-text .contact-info {
+            font-size: 0.9rem;
+            color: #555;
+            line-height: 1.6;
+        }
+
+        .header-text .contact-info a {
+            color: #1a6b3f;
+            text-decoration: none;
+            font-weight: 600;
+        }
+
+        .header-text .contact-info a:hover {
+            text-decoration: underline;
+            color: #0d4027;
+        }
+
+        /* Main Container */
+        .container {
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            max-width: 800px;
+            width: 95%;
+            margin: 30px auto;
+            overflow: hidden;
+        }
+
+        .app-header {
+            background: linear-gradient(135deg, #1a6b3f 0%, #2e8b57 100%);
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+
+        .app-header h2 {
+            font-size: 1.8rem;
+            margin-bottom: 8px;
+            font-weight: 700;
+        }
+
+        .app-header p {
+            font-size: 0.95rem;
+            opacity: 0.95;
+        }
+
+        .content-area {
+            padding: 35px;
+        }
+
+        /* Tabs */
+        .tabs {
+            display: flex;
+            gap: 12px;
+            margin-bottom: 30px;
+            background: #f8f9fa;
+            padding: 8px;
+            border-radius: 12px;
+            border: 2px solid #e9ecef;
+        }
+
+        .tab {
+            flex: 1;
+            padding: 14px 20px;
+            background: transparent;
+            border: none;
+            border-radius: 8px;
+            font-size: 15px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            color: #6c757d;
+        }
+
+        .tab.active {
+            background: linear-gradient(135deg, #1a6b3f 0%, #2e8b57 100%);
+            color: white;
+            box-shadow: 0 4px 12px rgba(26, 107, 63, 0.3);
+        }
+
+        .tab:hover:not(.active) {
+            background: #e9ecef;
+            color: #1a6b3f;
+        }
+
+        /* Input Groups */
+        .input-group {
+            margin-bottom: 25px;
+        }
+
+        label {
+            display: block;
+            color: #0d4027;
+            font-weight: 600;
+            margin-bottom: 10px;
+            font-size: 14px;
+        }
+
+        select, textarea, input[type="file"] {
+            width: 100%;
+            padding: 13px 16px;
+            border: 2px solid #dee2e6;
+            border-radius: 10px;
+            font-size: 14px;
+            font-family: inherit;
+            transition: all 0.3s ease;
+            background: white;
+        }
+
+        select {
+            appearance: none;
+            background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%231a6b3f' stroke-width='2'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
+            background-repeat: no-repeat;
+            background-position: right 14px center;
+            background-size: 20px;
+            padding-right: 45px;
+        }
+
+        textarea:focus, input:focus, select:focus {
+            outline: none;
+            border-color: #1a6b3f;
+            box-shadow: 0 0 0 4px rgba(26, 107, 63, 0.1);
+        }
+
+        textarea {
+            resize: vertical;
+            min-height: 120px;
+        }
+
+        .helper-text {
+            font-size: 12px;
+            color: #6c757d;
+            margin-top: 8px;
+            font-style: italic;
+        }
+
+        /* Buttons */
+        .btn {
+            width: 100%;
+            padding: 16px;
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+        }
+
+        .btn:active {
+            transform: translateY(0);
+        }
+
+        .btn-sms {
+            background: linear-gradient(135deg, #0d4027 0%, #1a6b3f 100%);
+        }
+
+        .btn-whatsapp {
+            background: linear-gradient(135deg, #25D366 0%, #1a6b3f 100%);
+        }
+
+        .btn-secondary {
+            background: white;
+            color: #1a6b3f;
+            border: 2px solid #1a6b3f;
+        }
+
+        .btn-secondary:hover {
+            background: #f8f9fa;
+        }
+
+        /* Counter */
+        .counter {
+            text-align: center;
+            margin-top: 25px;
+            padding: 25px;
+            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+            border-radius: 12px;
+            border: 3px solid #1a6b3f;
+        }
+
+        .counter-number {
+            font-size: 42px;
+            font-weight: 900;
+            color: #0d4027;
+            line-height: 1;
+        }
+
+        .counter-label {
+            font-size: 14px;
+            color: #6c757d;
+            margin-top: 8px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        /* Info Boxes */
+        .info-box {
+            background: linear-gradient(135deg, #e8f5e9 0%, #c8e6c9 100%);
+            border-left: 5px solid #1a6b3f;
+            color: #0d4027;
+            padding: 15px 18px;
+            border-radius: 8px;
+            margin-bottom: 25px;
+            font-size: 14px;
+            font-weight: 500;
+        }
+
+        /* Tab Content */
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+            animation: fadeIn 0.4s ease-in;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Footer */
+        .footer {
+            background: linear-gradient(135deg, #0d4027 0%, #1a6b3f 100%);
+            padding: 20px;
+            text-align: center;
+            color: white;
+            font-size: 0.9rem;
+            border-top: 3px solid #2e8b57;
+        }
+
+        .footer p {
+            font-weight: 500;
+            letter-spacing: 0.5px;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .header-content {
+                flex-direction: column;
+                text-align: center;
+                gap: 20px;
+            }
+
+            .school-logo-img {
+                width: 85px;
+                height: 85px;
+            }
+
+            .header-text h1 {
+                font-size: 1.5rem;
+            }
+
+            .header-text h2 {
+                font-size: 0.85rem;
+            }
+
+            .app-header h2 {
+                font-size: 1.4rem;
+            }
+
+            .content-area {
+                padding: 25px;
+            }
+
+            .tab {
+                font-size: 13px;
+                padding: 12px 15px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .school-logo-img {
+                width: 70px;
+                height: 70px;
+            }
+
+            .header-text h1 {
+                font-size: 1.3rem;
+            }
+
+            .counter-number {
+                font-size: 36px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<!-- Professional School Header -->
+<header class="school-header">
+    <div class="header-content">
+        <div class="logo-container">
+            <img src="images/logo.png" alt="Mkuzo Islamic Secondary School Logo" class="school-logo-img">
+        </div>
+        <div class="header-text">
+            <h2>Islamic Propagation Centre</h2>
+            <h1>MKUZO ISLAMIC SECONDARY SCHOOL</h1>
+            <div class="contact-info">
+                P.O. Box 346 Songea - Ruvuma | Mob: 0654 878317, 0621 615646 | 
+                Email: <a href="mailto:mkuzo.islamic@yahoo.com">mkuzo.islamic@yahoo.com</a>
+            </div>
+        </div>
+    </div>
+</header>
+
+<!-- Main Container -->
+<div class="container">
+    
+    <!-- App Header -->
+    <div class="app-header">
+        <h2>📱 Bulk Messaging System</h2>
+        <p>Send SMS or WhatsApp messages to parents efficiently</p>
+    </div>
+
+    <!-- Content Area -->
+    <div class="content-area">
+        
+        <!-- Tabs -->
+        <div class="tabs">
+            <button class="tab active" onclick="switchTab('sms')">📨 SMS Composer</button>
+            <button class="tab" onclick="switchTab('whatsapp')">💬 WhatsApp Sender</button>
+        </div>
+
+        <!-- SMS TAB -->
+        <div id="sms-content" class="tab-content active">
+            <div class="info-box">
+                💡 Select a classroom to auto-load parent numbers, upload an Excel/CSV file, or import from phone contacts.
+            </div>
+
+            <div class="input-group">
+                <label>Select Classroom/Form</label>
+                <select id="classroom-select" onchange="loadParents(this.value)">
+                    <option value="">-- Choose Classroom/Form --</option>
+                </select>
+            </div>
+
+            <div class="input-group">
+                <label>Or Upload Excel/CSV File</label>
+                <input type="file" id="sms-file" accept=".csv, .xlsx" onchange="handleFileUpload(event, 'sms')" />
+                <div class="helper-text">Upload a file with phone numbers (one per row or column).</div>
+            </div>
+
+            <div class="input-group">
+                <button class="btn btn-secondary" onclick="pickContacts('sms')">📱 Import from Phone Contacts</button>
+                <div class="helper-text">Available on supported mobile browsers (Chrome/Edge).</div>
+            </div>
+
+            <div class="input-group">
+                <label for="sms-numbers">Parent Phone Numbers</label>
+                <textarea id="sms-numbers" placeholder="Parent numbers will appear here automatically..." oninput="updateCount('sms')"></textarea>
+            </div>
+
+            <div class="input-group">
+                <label for="sms-message">Message Content (Optional)</label>
+                <textarea id="sms-message" placeholder="Type your message here..."></textarea>
+            </div>
+
+            <button class="btn btn-sms" onclick="sendBulkSMS()">🚀 Open SMS Composer</button>
+            <button class="btn btn-secondary" onclick="clearFields('sms')">🗑️ Clear All Fields</button>
+
+            <div class="counter">
+                <div class="counter-number" id="sms-count">0</div>
+                <div class="counter-label">Recipients Loaded</div>
+            </div>
+        </div>
+
+        <!-- WHATSAPP TAB -->
+        <div id="whatsapp-content" class="tab-content">
+            <div class="info-box">
+                💡 Load parent numbers and compose your message. Each recipient receives an individual WhatsApp message.
+            </div>
+
+            <div class="input-group">
+                <label>Select Classroom/Form</label>
+                <select id="classroom-select-wa" onchange="loadParents(this.value, 'whatsapp')">
+                    <option value="">-- Choose Classroom/Form --</option>
+                </select>
+            </div>
+
+            <div class="input-group">
+                <label>Or Upload Excel/CSV File</label>
+                <input type="file" id="wa-file" accept=".csv, .xlsx" onchange="handleFileUpload(event, 'whatsapp')" />
+                <div class="helper-text">Upload a file with phone numbers (one per row or column).</div>
+            </div>
+
+            <div class="input-group">
+                <button class="btn btn-secondary" onclick="pickContacts('whatsapp')">📱 Import from Phone Contacts</button>
+                <div class="helper-text">Available on supported mobile browsers (Chrome/Edge).</div>
+            </div>
+
+            <div class="input-group">
+                <label for="wa-numbers">Parent Phone Numbers</label>
+                <textarea id="wa-numbers" placeholder="Parent numbers will appear here automatically..." oninput="updateCount('whatsapp')"></textarea>
+            </div>
+
+            <div class="input-group">
+                <label for="wa-message">Message Content (Required)</label>
+                <textarea id="wa-message" placeholder="Type your message here..."></textarea>
+            </div>
+
+            <button class="btn btn-whatsapp" onclick="sendBulkWhatsApp()">💬 Send via WhatsApp</button>
+            <button class="btn btn-secondary" onclick="clearFields('whatsapp')">🗑️ Clear All Fields</button>
+
+            <div class="counter">
+                <div class="counter-number" id="wa-count">0</div>
+                <div class="counter-label">Recipients Loaded</div>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- Footer -->
+    <div class="footer">
+        <p>&copy; 2025 Mkuzo Islamic Secondary School. All Rights Reserved.</p>
+    </div>
+
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
+<script>
+const API_URL = 'https://script.google.com/macros/s/AKfycbxM7YT-wvmPsjCTrsodNwpfDEW0oYJq_PmxqOjNYA3Opkg6F2NaYF8iuekpF4UtnzKwqQ?action=list';
+let allAdmissions = [];
+
+async function fetchAdmissions() {
+    try {
+        const res = await fetch(API_URL);
+        const data = await res.json();
+        if (data.status === 'success') {
+            allAdmissions = data.data;
+            populateClassrooms();
+        }
+    } catch (err) {
+        console.error(err);
+        alert('⚠️ Failed to load admissions data. Please check your connection.');
+    }
+}
+
+function populateClassrooms() {
+    const classrooms = [...new Set(allAdmissions.map(r => r['Classroom/Form']).filter(Boolean))].sort();
+    const selects = [document.getElementById('classroom-select'), document.getElementById('classroom-select-wa')];
+    selects.forEach(sel => {
+        classrooms.forEach(cls => {
+            const opt = document.createElement('option');
+            opt.value = cls;
+            opt.textContent = cls;
+            sel.appendChild(opt);
+        });
+    });
+}
+
+function loadParents(classroom, type = 'sms') {
+    if (!classroom) return;
+
+    const filtered = allAdmissions.filter(r => r['Classroom/Form'] === classroom && r['Parent Phone']);
+    // Normalize and deduplicate
+    const uniqueNumbers = Array.from(new Set(
+        filtered.map(r => String(r['Parent Phone']).replace(/\D/g, '').trim()).filter(Boolean)
+    ));
+
+    const textarea = document.getElementById(type === 'sms' ? 'sms-numbers' : 'wa-numbers');
+    textarea.value = uniqueNumbers.join('\n');
+    updateCount(type);
+}
+
+function handleFileUpload(event, type = 'sms') {
+    const file = event.target.files[0];
+    if (!file) return;
+
+    const reader = new FileReader();
+    reader.onload = (e) => {
+        const data = new Uint8Array(e.target.result);
+        const workbook = XLSX.read(data, { type: 'array' });
+        const sheetName = workbook.SheetNames[0];
+        const sheet = XLSX.utils.sheet_to_json(workbook.Sheets[sheetName], { header: 1 });
+
+        // Extract and deduplicate phone numbers
+        const uniqueNumbers = Array.from(new Set(
+            sheet.flat()
+                .map(n => String(n).replace(/\D/g, '').trim())
+                .filter(num => num.length > 0 && /^\d+$/.test(num))
+        ));
+
+        const textarea = document.getElementById(type === 'sms' ? 'sms-numbers' : 'wa-numbers');
+        textarea.value = uniqueNumbers.join('\n');
+        updateCount(type);
+    };
+    reader.readAsArrayBuffer(file);
+}
+
+async function pickContacts(type = 'sms') {
+    if (!('contacts' in navigator) || !('ContactsManager' in window)) {
+        alert('⚠️ Contact Picker not supported on this device/browser.');
+        return;
+    }
+
+    try {
+        const contacts = await navigator.contacts.select(['name', 'tel'], { multiple: true });
+        const uniqueNumbers = Array.from(new Set(
+            contacts.flatMap(c => c.tel)
+                .map(num => num.replace(/\D/g, '').trim())
+                .filter(Boolean)
+        ));
+
+        const textarea = document.getElementById(type === 'sms' ? 'sms-numbers' : 'wa-numbers');
+        textarea.value = uniqueNumbers.join('\n');
+        updateCount(type);
+    } catch (err) {
+        console.warn('Contact picker cancelled or failed', err);
+    }
+}
+
+
+function parseNumbers(text) {
+    return text.split(/[\n,]+/)
+        .map(num => num.trim().replace(/[\s\-()]/g, ''))
+        .filter(num => num.length > 0);
+}
+
+function updateCount(type) {
+    const numbersInput = document.getElementById(`${type === 'sms' ? 'sms' : 'wa'}-numbers`);
+    const countDisplay = document.getElementById(`${type === 'sms' ? 'sms' : 'wa'}-count`);
+    countDisplay.textContent = parseNumbers(numbersInput.value).length;
+}
+
+function sendBulkSMS() {
+    const numbers = parseNumbers(document.getElementById('sms-numbers').value);
+    const message = document.getElementById('sms-message').value.trim();
+    if (!numbers.length) return alert('⚠️ No phone numbers loaded. Please add recipients first.');
+    let smsURI = `sms:${numbers.join(';')}`;
+    if (message) smsURI += `?body=${encodeURIComponent(message)}`;
+    window.location.href = smsURI;
+}
+
+function sendBulkWhatsApp() {
+    const numbers = parseNumbers(document.getElementById('wa-numbers').value);
+    const message = document.getElementById('wa-message').value.trim();
+    if (!numbers.length || !message) return alert('⚠️ Please add phone numbers and a message.');
+    let index = 0;
+    function sendNext() {
+        if (index < numbers.length) {
+            const waURL = `https://wa.me/${numbers[index]}?text=${encodeURIComponent(message)}`;
+            window.open(waURL, '_blank');
+            index++;
+            if (index < numbers.length) {
+                const proceed = confirm(`Message ${index}/${numbers.length} sent. Continue to next recipient?`);
+                if (proceed) setTimeout(sendNext, 500);
+            } else alert(`✅ Complete! ${numbers.length} messages sent successfully.`);
+        }
+    }
+    if (confirm(`Ready to send message to ${numbers.length} recipients via WhatsApp?`)) sendNext();
+}
+
+function clearFields(type) {
+    document.getElementById(`${type === 'sms' ? 'sms' : 'wa'}-numbers`).value = '';
+    document.getElementById(`${type === 'sms' ? 'sms' : 'wa'}-message`).value = '';
+    updateCount(type);
+}
+
+function switchTab(tab) {
+    document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+    event.target.classList.add('active');
+    document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+    document.getElementById(`${tab}-content`).classList.add('active');
+}
+
+fetchAdmissions();
+</script>
+</body>
+</html>

@@ -1,0 +1,717 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Mkuzo Islamic Secondary School - Admin & Bulk Messaging</title>
+
+  <!-- XLSX for import/export -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+
+  <style>
+    /* ====== Combined Styling (concise, responsive, Mkuzo look) ====== */
+    :root{
+      --green-1:#1a5438; --green-2:#2d6a4f; --accent:#40916c; --light:#f8fdf9;
+      --card-border:#b7e4c7;
+    }
+    *{margin:0;padding:0;box-sizing:border-box}
+    body{
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(135deg,#d8e9e4 0%,#95d5b2 50%,#74c69d 100%);
+      min-height:100vh;padding:18px;color:#153b2e;
+    }
+    .school-header{
+      display:flex;align-items:center;justify-content:center;flex-wrap:wrap;padding:18px;background:linear-gradient(135deg,#f8f6f0 0%,#ffffff 100%);border-bottom:4px solid var(--green-1);border-radius:12px;gap:12px;
+    }
+    .school-header img{height:78px;filter:drop-shadow(0 2px 8px rgba(0,0,0,0.06))}
+    .school-header h1{font-size:1.5rem;color:var(--green-1);font-weight:800}
+    .school-header h2{font-size:0.85rem;color:var(--accent);letter-spacing:1px}
+    .container{max-width:1200px;margin:22px auto}
+    /* Login Card */
+    .login-container{max-width:520px;margin:40px auto;background:white;border-radius:18px;box-shadow:0 18px 44px rgba(26,84,56,0.18);overflow:hidden;border:3px solid var(--green-1)}
+    .login-header{background:linear-gradient(135deg,var(--green-1) 0%,var(--green-2) 100%);color:white;padding:34px;text-align:center;position:relative}
+    .login-header::before{content:'☪';position:absolute;font-size:120px;opacity:0.06;right:8px;top:-20px;transform:rotate(-12deg)}
+    .login-body{padding:30px;background:var(--light)}
+    label{display:block;margin-bottom:8px;font-weight:700;color:var(--green-1)}
+    input[type="password"], input[type="text"], textarea, select{
+      width:100%;padding:12px 14px;border:2px solid var(--card-border);border-radius:10px;background:#fff;font-size:1rem;
+    }
+    .btn{padding:12px 16px;border-radius:10px;border:none;cursor:pointer;font-weight:700}
+    .btn-primary{background:linear-gradient(135deg,var(--green-1),var(--green-2));color:white}
+    .btn-secondary{background:white;color:var(--green-1);border:2px solid var(--green-1)}
+    .btn-success{background:linear-gradient(135deg,#25D366,#128C7E);color:white}
+    .btn-danger{background:linear-gradient(135deg,#d62828,#9d0208);color:white}
+    .flex{display:flex;gap:12px;align-items:center}
+    .space-between{display:flex;justify-content:space-between;align-items:center}
+    .dashboard-container{display:none;margin-top:18px}
+    .dashboard-header{background:white;border-radius:12px;padding:18px;border:3px solid var(--card-border);box-shadow:0 10px 26px rgba(26,84,56,0.12)}
+    .dashboard-header h1{font-size:1.4rem;color:var(--green-1)}
+    .logout-btn{padding:10px 14px;border-radius:10px;background:linear-gradient(135deg,#d62828,#9d0208);color:white;border:none}
+    .card{background:white;padding:18px;border-radius:12px;border:2px solid #d8f3dc;box-shadow:0 10px 28px rgba(26,84,56,0.08);margin-top:14px}
+    .stats-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:12px;margin-top:12px}
+    .stat-card{background:linear-gradient(135deg,var(--green-1),var(--green-2));color:white;padding:18px;border-radius:12px;text-align:center}
+    .stat-card .number{font-size:1.8rem;font-weight:900}
+    .table-wrapper{overflow-x:auto;border-radius:12px;border:2px solid var(--card-border);margin-top:12px}
+    table{width:100%;border-collapse:collapse;background:white}
+    th{background:linear-gradient(135deg,var(--green-1),var(--green-2));color:white;padding:12px;text-align:left;position:sticky;top:0}
+    td{padding:10px;border-bottom:1px solid #eef7f0}
+    tr:hover{background:#fbfffb}
+    .loading{text-align:center;padding:30px;color:var(--green-2);font-weight:700}
+    /* Messaging area (tabs) */
+    .tabs{display:flex;gap:8px;background:#f1f8f4;padding:8px;border-radius:10px;border:2px solid #e6efe7;margin-top:12px}
+    .tab{flex:1;padding:10px;border-radius:8px;border:none;background:transparent;cursor:pointer;font-weight:700;color:#37664e}
+    .tab.active{background:linear-gradient(135deg,var(--green-1),var(--green-2));color:white;box-shadow:0 6px 18px rgba(26,84,56,0.16)}
+    .tab-content{display:none;padding-top:12px}
+    .tab-content.active{display:block}
+    .helper-text{font-size:12px;color:#536b57;margin-top:6px}
+    .counter{text-align:center;margin-top:12px;padding:12px;border-radius:8px;background:#f8fffa;border:2px solid #e5f6e9}
+    .counter-number{font-size:28px;font-weight:900;color:var(--green-2)}
+    .footer{margin-top:18px;padding:12px;text-align:center;color:white;background:linear-gradient(135deg,var(--green-1),var(--green-2));border-radius:8px}
+    @media(max-width:800px){.space-between{flex-direction:column;gap:8px}.school-header{padding:12px}.login-container{margin:18px}}
+  </style>
+</head>
+<body>
+
+  <div class="school-header">
+    <div style="display:flex;align-items:center;gap:12px">
+      <img src="images/logo.png" alt="Mkuzo Logo" onerror="this.style.display='none'">
+      <div style="text-align:left">
+        <h2>ISLAMIC PROPAGATION CENTRE</h2>
+        <h1>MKUZO ISLAMIC SECONDARY SCHOOL</h1>
+        <div style="font-size:0.85rem;color:var(--accent)">P.O. Box 346 Songea - Ruvuma | Mob: 0654 878317, 0621 615646 | <a href="mailto:mkuzo.islamic@yahoo.com">mkuzo.islamic@yahoo.com</a></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="container">
+    <!-- LOGIN -->
+    <div id="loginScreen" class="login-container">
+      <div class="login-header">
+        <h2>☪ Admin Access</h2>
+        <p>Mkuzo Islamic Secondary School</p>
+      </div>
+      <div class="login-body">
+        <div class="form-group">
+          <label>Admin Password</label>
+          <input id="adminPass" type="password" placeholder="Enter admin password" />
+        </div>
+        <div style="margin-top:10px" class="flex">
+          <button id="loginBtn" class="btn btn-primary" style="flex:1">Login</button>
+          
+        </div>
+        <div id="loginMsg" style="margin-top:10px;color:#b02020;font-weight:700"></div>
+      </div>
+    </div>
+
+    <!-- DASHBOARD -->
+    <div id="adminArea" class="dashboard-container">
+      <div class="dashboard-header space-between">
+        <h1>📊 Admin Dashboard</h1>
+        <div style="display:flex;gap:8px;align-items:center">
+          <button id="logoutBtn" class="logout-btn">Logout</button>
+        </div>
+      </div>
+
+      <div class="stats-grid">
+        <div class="stat-card card">
+          <div class="number" id="totalAdmissions">0</div>
+          <div style="opacity:0.95;font-weight:700;margin-top:6px">Total Admissions</div>
+        </div>
+        <div class="stat-card card">
+          <div class="number" id="todayAdmissions">0</div>
+          <div style="opacity:0.95;font-weight:700;margin-top:6px">Today's Applications</div>
+        </div>
+      </div>
+
+      <div class="card">
+        <h3 style="margin-bottom:12px">⚡ Quick Actions</h3>
+        <div style="display:flex;gap:8px;flex-wrap:wrap">
+          <button id="refresh" class="btn btn-secondary">🔄 Refresh Data</button>
+          <button id="exportAll" class="btn btn-primary">📥 Export Selected Class(es) to Excel</button>
+          <button id="clearLocal" class="btn btn-danger">🗑️ Clear Local Backup</button>
+        </div>
+      </div>
+
+      <!-- Messaging Panel (tabs) -->
+      <div class="card">
+        <h3>📱 Bulk Messaging System</h3>
+        <div class="tabs" role="tablist">
+          <button class="tab active" data-tab="sms">📨 SMS Composer</button>
+          <button class="tab" data-tab="whatsapp">💬 WhatsApp Sender</button>
+          <button class="tab" data-tab="broadcast">📣 Broadcast by Class</button>
+        </div>
+
+        <!-- SMS -->
+        <div id="sms-content" class="tab-content active">
+          <div class="helper-text">Select a classroom to auto-load parent numbers, upload an Excel/CSV file, or import from phone contacts.</div>
+
+          <div style="margin-top:12px">
+            <label>Select Classroom/Form</label>
+            <select id="classroom-select"><option value="">-- Choose Classroom/Form --</option></select>
+          </div>
+
+          <div style="margin-top:10px">
+            <label>Or Upload Excel/CSV File</label>
+            <input type="file" id="sms-file" accept=".csv, .xlsx" />
+            <div class="helper-text">Upload file with phone numbers (one per row or column) — numbers will be extracted automatically.</div>
+          </div>
+
+          <div style="margin-top:10px">
+            <button class="btn btn-secondary" onclick="pickContacts('sms')">📱 Import from Phone Contacts</button>
+            <div class="helper-text">Contact Picker available on supported mobile browsers.</div>
+          </div>
+
+          <div style="margin-top:10px">
+            <label>Parent Phone Numbers</label>
+            <textarea id="sms-numbers" placeholder="Parent numbers will appear here automatically..." rows="4" oninput="updateCount('sms')"></textarea>
+          </div>
+
+          <div style="margin-top:10px">
+            <label>Message Content (Optional)</label>
+            <textarea id="sms-message" placeholder="Type your SMS message here..." rows="3"></textarea>
+          </div>
+
+          <div style="display:flex;gap:8px;margin-top:12px">
+            <button class="btn btn-primary" onclick="sendBulkSMS()">🚀 Open SMS Composer</button>
+            <button class="btn btn-secondary" onclick="clearFields('sms')">🗑️ Clear All</button>
+          </div>
+
+          <div class="counter" style="margin-top:12px">
+            <div class="counter-number" id="sms-count">0</div>
+            <div class="counter-label">Recipients Loaded</div>
+          </div>
+        </div>
+
+        <!-- WhatsApp -->
+        <div id="whatsapp-content" class="tab-content">
+          <div class="helper-text">Load parent numbers and compose your message. Each recipient receives an individual WhatsApp message via wa.me links.</div>
+
+          <div style="margin-top:12px">
+            <label>Select Classroom/Form</label>
+            <select id="classroom-select-wa"><option value="">-- Choose Classroom/Form --</option></select>
+          </div>
+
+          <div style="margin-top:10px">
+            <label>Or Upload Excel/CSV File</label>
+            <input type="file" id="wa-file" accept=".csv, .xlsx" />
+            <div class="helper-text">Upload file with phone numbers (one per row or column).</div>
+          </div>
+
+          <div style="margin-top:10px">
+            <button class="btn btn-secondary" onclick="pickContacts('whatsapp')">📱 Import from Phone Contacts</button>
+            <div class="helper-text">Contact Picker available on supported mobile browsers.</div>
+          </div>
+
+          <div style="margin-top:10px">
+            <label>Parent Phone Numbers</label>
+            <textarea id="wa-numbers" placeholder="Parent numbers will appear here automatically..." rows="4" oninput="updateCount('whatsapp')"></textarea>
+          </div>
+
+          <div style="margin-top:10px">
+            <label>Message Content (Required)</label>
+            <textarea id="wa-message" placeholder="Type your WhatsApp message here..." rows="4">Dear parent, please note the reporting date is 12 OCT, 2025. - Mkuzo Islamic Secondary School</textarea>
+          </div>
+
+          <div style="display:flex;gap:8px;margin-top:12px">
+            <button class="btn btn-success" onclick="sendBulkWhatsApp()">💬 Send via WhatsApp</button>
+            <button class="btn btn-secondary" onclick="clearFields('whatsapp')">🗑️ Clear All</button>
+          </div>
+
+          <div class="counter" style="margin-top:12px">
+            <div class="counter-number" id="wa-count">0</div>
+            <div class="counter-label">Recipients Loaded</div>
+          </div>
+        </div>
+
+        <!-- Broadcast by Class (multi-select + batch open) -->
+        <div id="broadcast-content" class="tab-content">
+          <div style="margin-top:8px" class="helper-text">Select one or multiple classes, auto-populate phone numbers, then send via WhatsApp or SMS (batched to avoid blockers).</div>
+
+          <div style="margin-top:10px">
+            <label>Select Class(es) (Ctrl/Command to pick multiple)</label>
+            <select id="filterClass" multiple style="min-height:120px;padding:10px;border-radius:8px;border:2px solid var(--card-border)"></select>
+          </div>
+
+          <div style="margin-top:10px">
+            <label>Phone Numbers (auto-populated - read-only)</label>
+            <textarea id="numbersBulk" rows="4" readonly></textarea>
+          </div>
+
+          <div style="margin-top:10px">
+            <label>Broadcast Message</label>
+            <textarea id="broadcastMessage" rows="4">Dear parent, please note the reporting date is 12 OCT, 2025. - Mkuzo Islamic Secondary School</textarea>
+          </div>
+
+          <div style="display:flex;gap:8px;margin-top:12px">
+            <button class="btn btn-success" id="sendWhatsApp">💬 Send WhatsApp</button>
+            <button class="btn btn-secondary" id="sendSms">📨 Send SMS</button>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Admissions Table -->
+      <div class="card" style="margin-top:14px">
+        <h3>📋 All Admissions</h3>
+        <div style="display:flex;gap:8px;align-items:center;margin-top:8px;flex-wrap:wrap">
+          <select id="filterClassSingle" style="padding:10px;border-radius:10px;border:2px solid var(--card-border)"><option value="">-- Select Class/Form for Table View --</option></select>
+          <input id="searchName" type="text" placeholder="Search by Student Name" style="flex:1;padding:12px;border-radius:10px;border:2px solid var(--card-border)" />
+          <button id="applyFilter" class="btn btn-primary">🔍 Apply Filter</button>
+        </div>
+
+        <div class="table-wrapper">
+          <div id="tableContainer" class="loading">Loading admissions data...</div>
+        </div>
+      </div>
+
+      <div class="footer">© 2025 Mkuzo Islamic Secondary School. All Rights Reserved.</div>
+    </div>
+  </div>
+
+  <script>
+    /******************************
+     * Configuration
+     ******************************/
+    // Using the endpoint you provided in html1.
+    const SHEETS_ENDPOINT_URL = 'https://script.google.com/macros/s/AKfycbxM7YT-wvmPsjCTrsodNwpfDEW0oYJq_PmxqOjNYA3Opkg6F2NaYF8iuekpF4UtnzKwqQ/exec';
+    const ADMIN_PASSWORD = 'islamicadmin2025';
+
+    // Internal state
+    let allAdmissions = [];
+
+    /******************************
+     * Utility helpers
+     ******************************/
+    function safeGet(r, candidates){
+      for (let c of candidates){
+        if (r[c] !== undefined && r[c] !== null) return r[c];
+        // fallback case-insensitive
+        for (let key in r){
+          if (key && key.toLowerCase() === c.toLowerCase()) return r[key];
+        }
+      }
+      return '';
+    }
+
+    function parseNumbers(text){
+      if (!text) return [];
+      return text.split(/[\n,;]+/).map(n=>n.trim()).map(n=>n.replace(/[\s\-\(\)]+/g,'')).filter(Boolean);
+    }
+
+    function normalizeNumber(n){
+      let s = String(n).replace(/\D/g,'');
+      if (!s) return '';
+      if (s.startsWith('0')) s = '255' + s.substring(1); // Tanzania default if leading zero
+      if (s.startsWith('+')) s = s.replace('+','');
+      return s;
+    }
+
+    /******************************
+     * Fetch admissions from Google Apps Script endpoint
+     ******************************/
+    async function fetchAdmissions(){
+      try {
+        const res = await fetch(SHEETS_ENDPOINT_URL + '?action=list');
+        const json = await res.json();
+        if (json.status === 'success' && Array.isArray(json.data)) {
+          console.log('✅ Sheet data received', json.data.length);
+          return json.data;
+        } else {
+          console.warn('⚠️ Unexpected response from sheet script', json);
+          return [];
+        }
+      } catch (e) {
+        console.error('🚨 Fetch error', e);
+        return [];
+      }
+    }
+
+    /******************************
+     * Rendering and UI wiring
+     ******************************/
+    async function loadAdmissions(autoPopulate=false){
+      document.getElementById('tableContainer').innerHTML = '<div class="loading">Loading admissions data...</div>';
+      const rows = await fetchAdmissions();
+      allAdmissions = rows;
+      if (!rows.length){
+        document.getElementById('tableContainer').innerHTML = '⚠️ No data found in sheet.';
+        document.getElementById('totalAdmissions').textContent = '0';
+        document.getElementById('todayAdmissions').textContent = '0';
+        return;
+      }
+
+      // Stats
+      document.getElementById('totalAdmissions').textContent = rows.length;
+      const today = new Date().toISOString().split('T')[0];
+      const todayCount = rows.filter(r => (String(safeGet(r,['Timestamp','timestamp'])||'')).startsWith(today)).length;
+      document.getElementById('todayAdmissions').textContent = todayCount;
+
+      buildGroupsDropdown(rows);
+      buildSingleClassDropdown(rows);
+      populateClassSelectors(rows);
+      renderTable(rows);
+
+      if (autoPopulate) populateGroupNumbersMulti([]);
+    }
+
+    function renderTable(rows){
+      if (!rows.length){
+        document.getElementById('tableContainer').innerHTML = 'No matching records found.';
+        return;
+      }
+      const headers = Array.from(new Set(rows.flatMap(r => Object.keys(r))));
+      let html = '<table><thead><tr>';
+      headers.forEach(h => html += `<th>${escapeHtml(h)}</th>`);
+      html += '</tr></thead><tbody>';
+      rows.forEach(r => {
+        html += '<tr>';
+        headers.forEach(h => html += `<td>${escapeHtml(r[h] ?? '')}</td>`);
+        html += '</tr>';
+      });
+      html += '</tbody></table>';
+      document.getElementById('tableContainer').innerHTML = html;
+    }
+
+    function escapeHtml(s){
+      if (s === null || s === undefined) return '';
+      return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+    }
+
+    /******************************
+     * Build class selectors
+     ******************************/
+    function buildGroupsDropdown(rows){
+      const groupSelect = document.getElementById('filterClass');
+      const classes = [...new Set(rows.map(r => safeGet(r,['Classroom/Form','Classroom','Form','Class'])).filter(Boolean))].sort();
+      groupSelect.innerHTML = '';
+      const allOption = document.createElement('option');
+      allOption.value = 'all';
+      allOption.textContent = '-- All Parents (All Classes) --';
+      groupSelect.appendChild(allOption);
+      classes.forEach(cls => {
+        const opt = document.createElement('option');
+        opt.value = cls; opt.textContent = cls;
+        groupSelect.appendChild(opt);
+      });
+    }
+
+    function buildSingleClassDropdown(rows){
+      const sel = document.getElementById('filterClassSingle');
+      const classes = [...new Set(rows.map(r => safeGet(r,['Classroom/Form','Classroom','Form','Class'])).filter(Boolean))].sort();
+      sel.innerHTML = '<option value="">-- Select Class/Form for Table View --</option>';
+      classes.forEach(c => sel.innerHTML += `<option value="${escapeHtml(c)}">${escapeHtml(c)}</option>`);
+    }
+
+    function populateClassSelectors(rows){
+      const classrooms = [...new Set(rows.map(r => safeGet(r,['Classroom/Form','Classroom','Form','Class'])).filter(Boolean))].sort();
+      const selects = [document.getElementById('classroom-select'), document.getElementById('classroom-select-wa')];
+      selects.forEach(sel => {
+        // keep top placeholder, then add missing options only
+        const existing = Array.from(sel.options).map(o=>o.value);
+        classrooms.forEach(cls => {
+          if (!existing.includes(cls)){
+            const opt = document.createElement('option'); opt.value = cls; opt.textContent = cls; sel.appendChild(opt);
+          }
+        });
+      });
+    }
+
+    /******************************
+     * Populate numbers for broadcasting (multi-select)
+     ******************************/
+    function populateGroupNumbersMulti(selectedValues){
+      let filtered = allAdmissions;
+      if (selectedValues && selectedValues.length && !selectedValues.includes('all')){
+        filtered = allAdmissions.filter(r => selectedValues.includes(safeGet(r,['Classroom/Form','Classroom','Form','Class'])));
+      }
+      const phones = filtered.map(r => safeGet(r,['Parent Phone','Phone','Parent Contact','parentphone','parent_phone'])).filter(Boolean).map(p=>String(p).replace(/\D/g,'').trim()).filter(Boolean);
+      const unique = Array.from(new Set(phones));
+      document.getElementById('numbersBulk').value = unique.join(', ');
+    }
+
+    /******************************
+     * File upload parsing (XLSX)
+     ******************************/
+    function handleFileUploadFileInput(file, type){
+      if (!file) return;
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        try {
+          const data = new Uint8Array(e.target.result);
+          const workbook = XLSX.read(data, { type: 'array' });
+          const sheetName = workbook.SheetNames[0];
+          const sheet = XLSX.utils.sheet_to_json(workbook.Sheets[sheetName], { header:1 });
+          const flat = sheet.flat();
+          const uniqueNumbers = Array.from(new Set(flat.map(n=>String(n).replace(/\D/g,'').trim()).filter(Boolean)));
+          const textarea = document.getElementById(type === 'sms' ? 'sms-numbers' : (type === 'whatsapp' ? 'wa-numbers' : 'numbersBulk'));
+          textarea.value = uniqueNumbers.join(type === 'sms' || type === 'whatsapp' ? '\n' : ', ');
+          updateCount(type === 'sms' ? 'sms' : (type === 'whatsapp' ? 'whatsapp' : 'broadcast'));
+        } catch (err){
+          console.error(err);
+          alert('Failed to parse file. Make sure it is a valid CSV or XLSX.');
+        }
+      };
+      reader.readAsArrayBuffer(file);
+    }
+
+    /******************************
+     * Contact Picker (optional)
+     ******************************/
+    async function pickContacts(type='sms'){
+      if (!('contacts' in navigator) && !('ContactsManager' in window)){
+        alert('⚠️ Contact Picker not supported on this device/browser.');
+        return;
+      }
+      try {
+        // modern Contact Picker API
+        const contacts = await navigator.contacts.select(['name','tel'], {multiple:true});
+        const uniqueNumbers = Array.from(new Set(contacts.flatMap(c => c.tel || []).map(n=>String(n).replace(/\D/g,'').trim()).filter(Boolean)));
+        const textarea = document.getElementById(type === 'sms' ? 'sms-numbers' : 'wa-numbers');
+        textarea.value = uniqueNumbers.join('\n');
+        updateCount(type === 'sms' ? 'sms' : 'whatsapp');
+      } catch (err){
+        console.warn('Contact picker cancelled or failed', err);
+      }
+    }
+
+    /******************************
+     * Send functions
+     ******************************/
+    function sendBulkSMS(){
+      const numbers = parseNumbers(document.getElementById('sms-numbers').value).map(normalizeNumber).filter(Boolean);
+      const message = document.getElementById('sms-message').value.trim();
+      if (!numbers.length) return alert('⚠️ No phone numbers loaded. Please add recipients first.');
+      // Try to open sms: with a joined list — behavior depends on platform
+      let smsURI = `sms:${numbers.join(';')}`;
+      if (message) smsURI += `?body=${encodeURIComponent(message)}`;
+      // open in new window/tab (some browsers may not allow)
+      window.location.href = smsURI;
+    }
+
+    function sendBulkWhatsApp(){
+      const numbers = parseNumbers(document.getElementById('wa-numbers').value).map(normalizeNumber).filter(Boolean);
+      const message = document.getElementById('wa-message').value.trim();
+      if (!numbers.length || !message) return alert('⚠️ Please add phone numbers and a message.');
+      // send in batches by opening wa.me in new tabs
+      const batch = 6;
+      const delay = 600;
+      let index = 0;
+      function sendBatch(){
+        numbers.slice(index, index+batch).forEach(n=>{
+          window.open(`https://wa.me/${n}?text=${encodeURIComponent(message)}`, '_blank');
+        });
+        index += batch;
+        if (index < numbers.length) setTimeout(sendBatch, delay);
+        else alert(`✅ Enqueued ${numbers.length} WhatsApp windows/tabs.`);
+      }
+      if (confirm(`Ready to send message to ${numbers.length} recipients via WhatsApp?`)) sendBatch();
+    }
+
+    // Broadcast buttons for multi-class
+    function batchOpenWhatsApp(numbers, msg, batch=6, delay=600){
+      let idx = 0;
+      function next(){
+        numbers.slice(idx, idx+batch).forEach(n=>{
+          const s = normalizeNumber(n);
+          if (s) window.open(`https://wa.me/${s}?text=${encodeURIComponent(msg)}`, '_blank');
+        });
+        idx += batch;
+        if (idx < numbers.length) setTimeout(next, delay);
+        else alert(`✅ Enqueued ${numbers.length} WhatsApp windows/tabs.`);
+      }
+      next();
+    }
+    function batchOpenSms(numbers, msg, batch=6, delay=600){
+      let idx = 0;
+      function next(){
+        numbers.slice(idx, idx+batch).forEach(n=>{
+          const s = normalizeNumber(n);
+          if (!s) return;
+          try {
+            window.open(`sms:${s}?body=${encodeURIComponent(msg)}`, '_blank');
+          } catch(e){
+            const a = document.createElement('a');
+            a.href = `sms:${s}?body=${encodeURIComponent(msg)}`;
+            a.target = '_blank';
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+          }
+        });
+        idx += batch;
+        if (idx < numbers.length) setTimeout(next, delay);
+        else alert(`✅ Attempted SMS composer for ${numbers.length} recipients.`);
+      }
+      next();
+    }
+
+    /******************************
+     * UI events
+     ******************************/
+    document.getElementById('loginBtn').addEventListener('click', async ()=>{
+      const pass = document.getElementById('adminPass').value;
+      if (pass !== ADMIN_PASSWORD){
+        document.getElementById('loginMsg').textContent = 'Invalid password';
+        return;
+      }
+      document.getElementById('loginScreen').style.display = 'none';
+      document.getElementById('adminArea').style.display = 'block';
+      await loadAdmissions(true);
+    });
+
+    // Demo button: bypass login for testing
+    document.getElementById('demoBtn').addEventListener('click', async ()=>{
+      document.getElementById('loginScreen').style.display = 'none';
+      document.getElementById('adminArea').style.display = 'block';
+      await loadAdmissions(true);
+    });
+
+    document.getElementById('logoutBtn').addEventListener('click', ()=>{
+      document.getElementById('adminArea').style.display = 'none';
+      document.getElementById('loginScreen').style.display = 'block';
+      document.getElementById('adminPass').value = '';
+    });
+
+    // Tabs
+    document.querySelectorAll('.tab').forEach(btn=>{
+      btn.addEventListener('click', (e)=>{
+        document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
+        btn.classList.add('active');
+        document.querySelectorAll('.tab-content').forEach(c=>c.classList.remove('active'));
+        const tab = btn.dataset.tab;
+        document.getElementById(tab+'-content').classList.add('active');
+      });
+    });
+
+    // Classroom selects change handlers (sms/wa file inputs)
+    document.getElementById('classroom-select').addEventListener('change', (e)=>{
+      const classroom = e.target.value;
+      if (!classroom) return;
+      const filtered = allAdmissions.filter(r => safeGet(r,['Classroom/Form','Classroom','Form','Class']) === classroom && safeGet(r,['Parent Phone','Phone']));
+      const unique = Array.from(new Set(filtered.map(r=>String(safeGet(r,['Parent Phone','Phone','Parent Contact'])).replace(/\D/g,'').trim()).filter(Boolean)));
+      document.getElementById('sms-numbers').value = unique.join('\n');
+      updateCount('sms');
+    });
+
+    document.getElementById('classroom-select-wa').addEventListener('change', (e)=>{
+      const classroom = e.target.value;
+      if (!classroom) return;
+      const filtered = allAdmissions.filter(r => safeGet(r,['Classroom/Form','Classroom','Form','Class']) === classroom && safeGet(r,['Parent Phone','Phone']));
+      const unique = Array.from(new Set(filtered.map(r=>String(safeGet(r,['Parent Phone','Phone','Parent Contact'])).replace(/\D/g,'').trim()).filter(Boolean)));
+      document.getElementById('wa-numbers').value = unique.join('\n');
+      updateCount('whatsapp');
+    });
+
+    // File inputs
+    document.getElementById('sms-file').addEventListener('change', (e)=> handleFileUploadFileInput(e.target.files[0],'sms'));
+    document.getElementById('wa-file').addEventListener('change', (e)=> handleFileUploadFileInput(e.target.files[0],'whatsapp'));
+
+    // Broadcast multi-select change
+    document.getElementById('filterClass').addEventListener('change', ()=>{
+      const multi = Array.from(document.getElementById('filterClass').selectedOptions).map(o=>o.value);
+      if (!multi.length) populateGroupNumbersMulti([]);
+      else populateGroupNumbersMulti(multi);
+    });
+
+    // Broadcast send
+    document.getElementById('sendWhatsApp').addEventListener('click', ()=>{
+      const nums = parseNumbers(document.getElementById('numbersBulk').value);
+      const msg = document.getElementById('broadcastMessage').value.trim();
+      if (!nums.length || !msg) return alert('Please select class(es) that contain parent numbers and type a message.');
+      if (confirm(`Send WhatsApp to ${nums.length} parents?`)) batchOpenWhatsApp(nums, msg);
+    });
+    document.getElementById('sendSms').addEventListener('click', ()=>{
+      const nums = parseNumbers(document.getElementById('numbersBulk').value);
+      const msg = document.getElementById('broadcastMessage').value.trim();
+      if (!nums.length || !msg) return alert('Please select class(es) that contain parent numbers and type a message.');
+      if (confirm(`Try to open SMS composer for ${nums.length} parents? (Your device/browser may limit multiple windows)`)) batchOpenSms(nums, msg);
+    });
+
+    // Export selected classes to Excel
+    document.getElementById('exportAll').addEventListener('click', ()=>{
+      const multi = Array.from(document.getElementById('filterClass').selectedOptions).map(o=>o.value);
+      let rows = allAdmissions;
+      if (multi.length && !multi.includes('all')) rows = allAdmissions.filter(r => multi.includes(safeGet(r,['Classroom/Form','Classroom','Form','Class'])));
+      if (!rows.length) return alert('No data to export for the selected class(es).');
+      const ws = XLSX.utils.json_to_sheet(rows);
+      const wb = XLSX.utils.book_new();
+      XLSX.utils.book_append_sheet(wb, ws, 'Admissions');
+      XLSX.writeFile(wb, 'mkuzo_admissions_filtered.xlsx');
+    });
+
+    // Refresh
+    document.getElementById('refresh').addEventListener('click', ()=> loadAdmissions(true));
+    document.getElementById('clearLocal').addEventListener('click', ()=> { if (confirm('Clear local backup?')) localStorage.clear(); });
+
+    // Filter/search apply
+    document.getElementById('applyFilter').addEventListener('click', ()=>{
+      const selectedGroup = document.getElementById('filterClassSingle').value;
+      const nameSearch = document.getElementById('searchName').value.trim().toLowerCase();
+      let filtered = allAdmissions;
+      if (selectedGroup) filtered = filtered.filter(r => safeGet(r,['Classroom/Form','Classroom','Form','Class']) === selectedGroup);
+      if (nameSearch) filtered = filtered.filter(r => (String(safeGet(r,['First Name','first name','Student Name','Student']) + ' ' + safeGet(r,['Last Name','last name','Surname'])).toLowerCase().includes(nameSearch.trim())));
+      renderTable(filtered);
+      // update numbersBulk for multi-select
+      const multi = Array.from(document.getElementById('filterClass').selectedOptions).map(o => o.value);
+      populateGroupNumbersMulti(multi);
+    });
+
+    // Update counters for sms/wa
+    function updateCount(type){
+      if (type === 'sms'){
+        document.getElementById('sms-count').textContent = parseNumbers(document.getElementById('sms-numbers').value).length;
+      } else if (type === 'whatsapp'){
+        document.getElementById('wa-count').textContent = parseNumbers(document.getElementById('wa-numbers').value).length;
+      } else { // broadcast
+        const n = document.getElementById('numbersBulk').value ? document.getElementById('numbersBulk').value.split(',').map(x=>x.trim()).filter(Boolean).length : 0;
+        // update both counters for visibility
+        document.getElementById('sms-count').textContent = parseNumbers(document.getElementById('sms-numbers').value).length;
+        document.getElementById('wa-count').textContent = parseNumbers(document.getElementById('wa-numbers').value).length;
+        return n;
+      }
+    }
+
+    // Clear fields
+    function clearFields(mode){
+      if (mode === 'sms'){
+        document.getElementById('sms-numbers').value = '';
+        document.getElementById('sms-message').value = '';
+        updateCount('sms');
+      } else if (mode === 'whatsapp'){
+        document.getElementById('wa-numbers').value = '';
+        document.getElementById('wa-message').value = '';
+        updateCount('whatsapp');
+      } else {
+        document.getElementById('numbersBulk').value = '';
+        document.getElementById('broadcastMessage').value = '';
+        updateCount('broadcast');
+      }
+    }
+    // Expose some functions to buttons that call them
+    window.pickContacts = pickContacts;
+    window.sendBulkWhatsApp = sendBulkWhatsApp;
+    window.sendBulkSMS = sendBulkSMS;
+    window.clearFields = clearFields;
+    window.handleFileUpload = handleFileUploadFileInput;
+    window.updateCount = updateCount;
+
+    /******************************
+     * Initial fetch (no auto-show)
+     ******************************/
+    // We will fetch when admin logs in (or demo clicked). But prefetch in background to speed up if wanted:
+    (async ()=>{
+      try {
+        const pre = await fetchAdmissions();
+        if (pre && pre.length) {
+          allAdmissions = pre;
+          // Prepopulate selects to show something even before login if demo used
+          buildSingleClassDropdown(allAdmissions);
+          buildGroupsDropdown(allAdmissions);
+          populateClassSelectors(allAdmissions);
+        }
+      } catch(e){}
+    })();
+
+  </script>
+</body>
+</html>
